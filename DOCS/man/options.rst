@@ -7815,12 +7815,23 @@ them.
     Tile size used to draw parts of the mpv window not covered by video in
     ``--background=tiles`` mode (default: 16).
 
-``--border-background=<none|color|tiles|blur>``
+``--border-background=<none|color|tiles|blur|shader>``
     Same as ``--background`` but only applies to the black bar/border area of
-    the window. ``vo=gpu-next`` only. Defaults to ``color``.
+    the window. ``vo=gpu-next`` only. Defaults to ``color``. When set to
+    ``shader``, the file given by ``--border-background-shader`` is used to
+    fill the border region.
 
 ``--background-blur-radius=<radius>``
     The blur radius (in pixels) to use for ``--border-background=blur``
+
+``--border-background-shader=<filename>``
+    Path to a user shader (in mpv ``//!HOOK BORDER`` format) that fills the
+    letterbox/pillarbox region around the video. ``vo=gpu-next`` only; takes
+    effect only when ``--border-background=shader``. Within the shader,
+    ``HOOKED`` is bound to the final composited video at target resolution,
+    which can be sampled at its edges to produce content-aware ambient
+    lighting effects. Requires a libplacebo build with ``PL_HOOK_BORDER``
+    support.
 
 ``--opengl-rectangle-textures``
     Force use of rectangle textures (default: no). Normally this shouldn't have

@@ -176,6 +176,7 @@ struct gl_next_opts {
     int image_subs_hdr_peak;
     int border_background;
     float background_blur_radius;
+    char *border_background_shader;
     float corner_rounding;
     bool inter_preserve;
     struct user_lut lut;
@@ -204,11 +205,13 @@ const struct m_sub_options gl_next_conf = {
             {"video", -1}),  M_RANGE(10, 10000)},
         {"allow-delayed-peak-detect", OPT_BOOL(delayed_peak)},
         {"border-background", OPT_CHOICE(border_background,
-            {"none",  BACKGROUND_NONE},
-            {"color", BACKGROUND_COLOR},
-            {"tiles", BACKGROUND_TILES}
-            ,{"blur", BACKGROUND_BLUR})},
+            {"none",   BACKGROUND_NONE},
+            {"color",  BACKGROUND_COLOR},
+            {"tiles",  BACKGROUND_TILES},
+            {"blur",   BACKGROUND_BLUR},
+            {"shader", BACKGROUND_SHADER})},
         {"background-blur-radius", OPT_FLOAT(background_blur_radius)},
+        {"border-background-shader", OPT_STRING(border_background_shader), .flags = M_OPT_FILE},
         {"corner-rounding", OPT_FLOAT(corner_rounding), M_RANGE(0, 1)},
         {"interpolation-preserve", OPT_BOOL(inter_preserve)},
         {"lut", OPT_STRING(lut.opt), .flags = M_OPT_FILE},
@@ -2550,10 +2553,11 @@ static void update_render_options(struct vo *vo)
     pars->params.disable_fbos = opts->dumb_mode == 1;
 
     static const int map_background_types[] = {
-        [BACKGROUND_NONE]  = PL_CLEAR_SKIP,
-        [BACKGROUND_COLOR] = PL_CLEAR_COLOR,
-        [BACKGROUND_TILES] = PL_CLEAR_TILES,
-        [BACKGROUND_BLUR]  = PL_CLEAR_BLUR,
+        [BACKGROUND_NONE]   = PL_CLEAR_SKIP,
+        [BACKGROUND_COLOR]  = PL_CLEAR_COLOR,
+        [BACKGROUND_TILES]  = PL_CLEAR_TILES,
+        [BACKGROUND_BLUR]   = PL_CLEAR_BLUR,
+        [BACKGROUND_SHADER] = PL_CLEAR_SKIP,
     };
     pars->params.background = map_background_types[opts->background];
     pars->params.border = map_background_types[p->next_opts->border_background];
@@ -2677,6 +2681,14 @@ AV_NOWARN_DEPRECATED(
             MP_TARRAY_APPEND(p, p->hooks, pars->params.num_hooks, hook);
             update_hook_opts(p, opts->user_shader_opts, opts->user_shaders[i], hook);
         }
+    }
+
+    if (p->next_opts->border_background == BACKGROUND_SHADER &&
+        p->next_opts->border_background_shader &&
+        p->next_opts->border_background_shader[0])
+    {
+        if ((hook = load_hook(p, p->next_opts->border_background_shader)))
+            MP_TARRAY_APPEND(p, p->hooks, pars->params.num_hooks, hook);
     }
 
     pars->params.hooks = p->hooks;

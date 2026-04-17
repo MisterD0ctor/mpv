@@ -78,6 +78,7 @@ enum background_type {
     BACKGROUND_COLOR,
     BACKGROUND_TILES,
     BACKGROUND_BLUR,
+    BACKGROUND_SHADER,
 };
 
 enum blend_subs_mode {
