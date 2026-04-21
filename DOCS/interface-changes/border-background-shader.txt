@@ -1,3 +1,4 @@
-add `--border-background=shader` and `--border-background-shader` for
-user-shader-driven letterbox/pillarbox fill (requires libplacebo with
-`PL_HOOK_BORDER` support)
+add `--border-background=shader`, `--border-background-shader` and
+`--border-background-shader-opts` for user-shader-driven
+letterbox/pillarbox fill (requires libplacebo with `PL_HOOK_BORDER`
+support)

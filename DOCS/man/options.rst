@@ -7833,6 +7833,13 @@ them.
     lighting effects. Requires a libplacebo build with ``PL_HOOK_BORDER``
     support.
 
+``--border-background-shader-opts=param1=value1,param2=value2,...``
+    Specifies the options to use for tunable parameters in the shader set
+    via ``--border-background-shader``. Works the same way as
+    ``--glsl-shader-opts``, including the optional ``shader/param=value``
+    prefix to scope parameters to a specific shader name. (``vo=gpu-next``
+    only)
+
 ``--opengl-rectangle-textures``
     Force use of rectangle textures (default: no). Normally this shouldn't have
     any advantages over normal textures. Note that hardware decoding overrides

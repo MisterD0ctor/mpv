@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/kaspe/Development/**)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\kaspe\\Development\\libplacebo\\src\\include\\libplacebo\\shaders",
+      "c:\\Users\\kaspe\\Development\\libplacebo\\src\\shaders",
+      "c:\\Users\\kaspe\\Development\\libplacebo\\src"
+    ]
+  }
+}

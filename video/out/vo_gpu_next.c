@@ -177,6 +177,7 @@ struct gl_next_opts {
     int border_background;
     float background_blur_radius;
     char *border_background_shader;
+    char **border_background_shader_opts;
     float corner_rounding;
     bool inter_preserve;
     struct user_lut lut;
@@ -212,6 +213,7 @@ const struct m_sub_options gl_next_conf = {
             {"shader", BACKGROUND_SHADER})},
         {"background-blur-radius", OPT_FLOAT(background_blur_radius)},
         {"border-background-shader", OPT_STRING(border_background_shader), .flags = M_OPT_FILE},
+        {"border-background-shader-opts", OPT_KEYVALUELIST(border_background_shader_opts)},
         {"corner-rounding", OPT_FLOAT(corner_rounding), M_RANGE(0, 1)},
         {"interpolation-preserve", OPT_BOOL(inter_preserve)},
         {"lut", OPT_STRING(lut.opt), .flags = M_OPT_FILE},
@@ -2687,8 +2689,11 @@ AV_NOWARN_DEPRECATED(
         p->next_opts->border_background_shader &&
         p->next_opts->border_background_shader[0])
     {
-        if ((hook = load_hook(p, p->next_opts->border_background_shader)))
+        if ((hook = load_hook(p, p->next_opts->border_background_shader))) {
             MP_TARRAY_APPEND(p, p->hooks, pars->params.num_hooks, hook);
+            update_hook_opts(p, p->next_opts->border_background_shader_opts,
+                             p->next_opts->border_background_shader, hook);
+        }
     }
 
     pars->params.hooks = p->hooks;
